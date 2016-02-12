@@ -41,9 +41,10 @@ library(arrayQualityMetrics)
 library(XML)
 library(affy)
 library(genefilter)
-library(RankProd)
-library(rat2302.db)
-library(dynamicTreeCut)
+## Not used for preprocess to FC DF, but used in analysis
+#library(RankProd)
+#library(rat2302.db)
+#library(dynamicTreeCut)
 #not currently functional on Platinum Server
 # library(XLConnect)
 
