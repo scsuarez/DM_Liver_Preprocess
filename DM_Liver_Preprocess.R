@@ -129,10 +129,9 @@ save(eset_liver_pc.25_nsFilter_rma_qc, file="Workspaces_And_Objects/eset_liver_p
 # Read the entire dataset
 # load("eset_liver_nsFilter.RData.RData")
 #creating a function to make the fold change data frame
-# 3 inputs
+# 2 inputs
 ## eset - eset after gene filter fitlering of non specific probes, probes with low variance or high variance, and present calls
 ## mappings - DF of detailed treatment to control mappings
-## filename_fc - file path of where to save the FC matrix that is created
 # output - fold change data frame
 
 # previous arguments used by MDAH
@@ -141,7 +140,7 @@ save(eset_liver_pc.25_nsFilter_rma_qc, file="Workspaces_And_Objects/eset_liver_p
 # filename to be saved  
 ##filename_fc <- paste("liver_fc_gene_filter_rma_qc.txt", sep="")
 
-makeFC_DF <- function(eset, mappings, filename_fc){
+makeFC_DF <- function(eset, mappings){
   pdata <- pData(eset)
   pdataSorted <- pdata[order(pdata$CHEMICAL, pdata$DOSE, pdata$DURATION, pdata$VEHICLE, pdata$ROUTE), ]
   sampleNamesSorted <- row.names(pdataSorted)
@@ -164,10 +163,14 @@ makeFC_DF <- function(eset, mappings, filename_fc){
     c.mappings <- mappings[mappings$TREATMENT_ARRAY_ID %in% treatmentNames,] # Map controls
     controlNames <- as.character(unique(c.mappings$CONTROL_ARRAY_ID))
     controlNames <- controlNames[controlNames %in% row.names(pdata_c)] # make sure these are in eset
+    # skip a condition if it has no cel files in the eset
+    if (length(treatmentNames) == "0") next
+    # skip a condition if it has no matching control cel files in the eset
+    if (length(controlNames) == "0") next
     print(paste("Number of treatments for ", i_print, ": ", length(treatmentNames), sep=""))
     print(paste("Number of controls for ", i_print, ": ", length(controlNames), sep=""))
     num_replicates_treatments <- c(num_replicates_treatments, length(treatmentNames))
-    num_replicates_controls <- c(num_replicates_controls, length(controlNames))
+    num_replicates_controls <- c(num_replicates_controls, length(controlNames))    
     eset_c <- eset[,c(controlNames)] # eset with controls
     exprs_c <- exprs(eset_c)
     eset_t <- eset[,c(treatmentNames)] # eset with treatments
@@ -180,15 +183,13 @@ makeFC_DF <- function(eset, mappings, filename_fc){
   fc_final <- cbind(row.names(fc_final), fc_final)
   colnames(fc_final)[1] <- "Probe_Set_ID"
   
-  print(paste("Saving: ", filename_fc, sep=""))
-  write.table(fc_final, file=filename_fc, sep="\t", quote=FALSE, row.names = FALSE)
-  
   return(fc_final)
 #************************
 }
 
 filename_fc <- paste("Workspaces_And_Objects/liver_fc_pc25_nsFilter_rma_qc.txt", sep="")
-fc_final <- makeFC_DF(eset_liver_pc.25_nsFilter_rma_qc, Liver_ConditionsMatch, filename_fc )
+fc_final <- makeFC_DF(eset_liver_pc.25_nsFilter_rma_qc, Liver_ConditionsMatch)
+print(paste("Saving: ", filename_fc, sep=""))
 write.table(fc_final, file=filename_fc, sep="\t", quote=FALSE, row.names = FALSE)
 
 enddate <- date()
