@@ -78,7 +78,7 @@ eset_liver_rma_qc <- rma(affy_liver_qc)
 # also leaves in probes that return the same EntrezID
 # now being explicit about defaults
 # only option being changed from default is remove.dupEntrez = FALSE, now not filtering for unique, most variable probe when the probes match duplicate EntrezId
-list_liver_nsFilter_rma_qc <- nsFilter(eset_liver_rma_qc, require.entrez = TRUE, remove.dupEntrez = FALSE, var.func = IQR, var.cutoff = .5, var.filter = TRUE, filterByQuantile = TRUE)
+list_liver_nsFilter_rma_qc <- nsFilter(eset_liver_rma_qc, require.entrez = TRUE, remove.dupEntrez = TRUE, var.filter = FALSE)
 # nsfilter returns a 2 element list, of the eset and the filter log
 # use exprs to return just the expression set portion of this object
 eset_liver_nsFilter_rma_qc <- list_liver_nsFilter_rma_qc$eset
@@ -116,9 +116,9 @@ presCallsEsetMatch <- function(percPresent, eset){
 # filters out rows of percPresent that aren't
 percPresent_esetMatch <- presCallsEsetMatch(percPresent, eset_liver_nsFilter_rma_qc)
 # filter eset based on present calls for each matched probe, percent present greater or equal to .25
-eset_liver_pc.25_nsFilter_rma_qc <- eset_liver_nsFilter_rma_qc[percPresent_esetMatch >= .25]
+eset_liver_pc.2_nsFilterNV_rma_qc <- eset_liver_nsFilter_rma_qc[percPresent_esetMatch >= .2]
 # save eset to file
-save(eset_liver_pc.25_nsFilter_rma_qc, file="Workspaces_And_Objects/eset_liver_pc25_nsFilter.RData")
+save(eset_liver_pc.2_nsFilterNV_rma_qc, file="Workspaces_And_Objects/eset_liver_pc2_nsFilterNV.RData")
 
 ################################
 # calculate FC matrix
@@ -187,8 +187,8 @@ makeFC_DF <- function(eset, mappings){
 #************************
 }
 
-filename_fc <- paste("Workspaces_And_Objects/liver_fc_pc25_nsFilter_rma_qc.txt", sep="")
-fc_final <- makeFC_DF(eset_liver_pc.25_nsFilter_rma_qc, Liver_ConditionsMatch)
+filename_fc <- paste("Workspaces_And_Objects/liver_fc_pc2_nsFilterNV.txt", sep="")
+fc_final <- makeFC_DF(eset_liver_pc.2_nsFilterNV_rma_qc, Liver_ConditionsMatch)
 print(paste("Saving: ", filename_fc, sep=""))
 write.table(fc_final, file=filename_fc, sep="\t", quote=FALSE, row.names = FALSE)
 
