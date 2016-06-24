@@ -26,10 +26,20 @@ DownloadSomePackages <- function(){
   biocLite("genefilter")
   biocLite("rat2302.db")
   biocLite("RankProd")
+  biocLite("cluster")
+  biocLite("biomaRt")
+  biocLite("annotate")
+  biocLite("org.Hs.eg.db")
+  install.packages("plyr")
+  install.packages("sqldf")
   install.packages("dynamicTreeCut")
   install.packages("XML")
-  install.packages("XLConnect")
 }
+
+# not currently functional in server environment due to inability to install rJava
+# install.packages("rJava")
+# install.packages("XLConnect")
+# biocLite("RDAVIDWebService")
 
 #should run Download some packages before running these R Files
 #return start date
