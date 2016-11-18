@@ -11,19 +11,22 @@ library(Biobase)
 library(webchem)
 library(rpubchem)
 
-# get phenodata DF from expression set object
-PhenodataDF <- pData(eset_liver_pc.2_nsFilterNV_rma_qc)
+# get phenodata DF from expression set object using Bioconductor Base package
+phenodataDF <- pData(eset_liver_pc.2_nsFilterNV_rma_qc)
 # get list of chemicals from column "chemical"
-ChemList <- PhenodataDF[ ,"CHEMICAL"]
+chemList <- phenodataDF[ ,"CHEMICAL"]
 # get uniques, as some chemicals are repeated in arrays
-uChemList <- unique(ChemList)
+uChemList <- unique(chemList)
 # remove controls, i.e. any entry without a chemical identifier
 uChemList <- uChemList[uChemList != ""]
 # get pubchem chemical ID returns list
-ChemCID <- get_cid(uChemList)
+# chemCID <- get_cid(uChemList)
+chemCSID <- cts_convert(uChemList, 'Chemical Name', 'ChemSpider')
+chemPC_CID <- cts_convert(uChemList, 'Chemical Name', 'PubChem CID')
+chemPC_CID.null <- 
 # unlist to vector
-ChemCID.unlist <- unlist(ChemCID)
-# get chemspider ID for chemical list
+chemCSIDdf <- as.data.frame(unlist(chemCSID))
+# get chemspider ID for chemical list, token belongs to SCS for chemspider.com
 chemCSID <- get_csid(uChemList, token = "c2d8bc05-d4d6-4322-be7b-c636b26ddc92")
 # from pubchem id vector, return smiles currently returning erroneous output - lots of NAs
 chemSMILES <- cir_query(ChemCID.unlist, representation = "smiles")

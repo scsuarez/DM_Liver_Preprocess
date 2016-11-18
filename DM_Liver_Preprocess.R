@@ -1,5 +1,5 @@
-# Should have run Prep_Preprocess_to_PresentCalls.R before this script, otherwise certain objects will not be present
-# working directory "/Working Directories/Preprocess to Present Calls/"
+# Should have run DM_Liver_Prep_Preprocess.R before this script, otherwise certain objects will not be present
+# working directory "/Working Directories/DM Liver Preprocess/"
 
 # load CEL files (ReadAffy) and read annotations
 uniqueCELPaths <- GetAllCELFiles() # getting all CEL files from various folders, recursive (goes into subfolders too),user defined function-JL

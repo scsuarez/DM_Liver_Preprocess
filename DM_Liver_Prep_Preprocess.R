@@ -1,4 +1,4 @@
-#Preprocess to Present Calls Functions and Prep
+#Preprocess Functions and Prep
 
 #working directory should contain
 #3 Directories
@@ -15,10 +15,8 @@
 #today<- Sys.Date()
 #format(today, format="%m-%d-%Y")
 
-#function to download packages that I was using
-#function to download packages that JL was using
-#already run for Linux server, will be needed for independent (HEM) running of the code
-DownloadSomePackages <- function(){
+# install pacakges needed for analysis
+# already run for Linux server, will be needed for independent (HEM) running of the code
   source("http://bioconductor.org/biocLite.R")
   biocLite("affy")
   biocLite("Biobase")
@@ -34,7 +32,7 @@ DownloadSomePackages <- function(){
   install.packages("sqldf")
   install.packages("dynamicTreeCut")
   install.packages("XML")
-}
+
 
 # not currently functional in server environment due to inability to install rJava
 # install.packages("rJava")
